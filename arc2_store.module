@@ -139,12 +139,3 @@ function arc2_store_ctools_plugin_directory($module, $plugin) {
     return 'plugins/export_ui';
   }
 }
-
-/**
- * Implements hook_ctools_plugin_api().
- */
-function arc2_store_ctools_plugin_api($owner, $api) {
-  if ('arc2_store' == $owner && 'arc2_store' == $api) {
-    return array('version' => 1);
-  }
-}
