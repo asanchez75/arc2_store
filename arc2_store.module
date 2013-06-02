@@ -36,9 +36,11 @@ function arc2_store_init() {
  */
 function arc2_store_menu() {
   ctools_include('export');
+  $items = array();
+
   // Avoids fatal errors during uninstallation.
   if (module_exists('arc2_store')) {
-    foreach (ctools_export_crud_load_all('arc2_store_settings') as $store) {
+    foreach (ctools_export_crud_load_all('arc2_store_settings', TRUE) as $store) {
       if (empty($store->disabled)) {
         $items[$store->settings['endpoint_path']] = array(
           'title' => $store->label,
