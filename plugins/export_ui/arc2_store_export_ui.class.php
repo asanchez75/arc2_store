@@ -23,6 +23,17 @@ class arc2_store_export_ui extends ctools_export_ui {
     return;
   }
 
+  /**
+   * Overrides ctools_export_ui::edit_save_form().
+   *
+   * Clear menu cache in case the SPARQL endpoint path was modified.
+   */
+  function edit_save_form($form_state) {
+    parent::edit_save_form($form_state);
+    if (!empty($form_state['plugin']['schema']) && $form_state['plugin']['schema'] == 'arc2_store_settings') {
+      menu_rebuild();
+    }
+  }
 }
 
 /**

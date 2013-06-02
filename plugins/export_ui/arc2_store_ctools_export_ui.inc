@@ -23,7 +23,6 @@ $plugin = array(
   // Define the names of the functions that provide the add/edit forms.
   'form' => array(
     'settings' => 'arc2_store_export_ui_form',
-//    'submit' => 'current_search_settings_form_submit',
   ),
 
    'handler' => array(
