@@ -25,8 +25,8 @@ $plugin = array(
     'settings' => 'arc2_store_export_ui_form',
   ),
 
-   'handler' => array(
-     'class' => 'arc2_store_export_ui',
-     'parent' => 'ctools_export_ui',
-   ),
+  'handler' => array(
+    'class' => 'arc2_store_export_ui',
+    'parent' => 'ctools_export_ui',
+  ),
 );
