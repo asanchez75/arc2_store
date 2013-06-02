@@ -45,6 +45,7 @@ function arc2_store_menu() {
           'page callback' => 'arc2_store_sparql_endpoint',
           'page arguments' => array($store->store_id),
           'access arguments' => array('access content'),
+          'type' => MENU_CALLBACK,
         );
       }
     }
