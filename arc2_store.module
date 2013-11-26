@@ -81,7 +81,9 @@ function arc2_store_get_store($store_id) {
 
   $config = array(
     // Sets database credentials.
-    'db_host' => $db['host'],
+    // ARC2 doesn't explicitely support a DB port value, but it can be made part
+    // of the host if it is specified in the Drupal DB configuration.
+    'db_host' => $db['host'] . ($db['port'] ? ':' . $db['port'] : ''),
     'db_name' => $db['database'],
     'db_user' => $db['username'],
     'db_pwd' => $db['password'],
