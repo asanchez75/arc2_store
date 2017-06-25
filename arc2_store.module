@@ -68,6 +68,16 @@ function arc2_store_export_form() {
 
   $form = array();
 
+  $query = db_select('arc2_store_settings', 't');
+  $query->fields('t', array('store_id'));
+  $rows = $query->execute()->fetchCol(0);
+
+  $form['rdf_database'] = array(
+    '#title' => 'RDF databases',
+    '#type' => 'select',
+    '#options' => drupal_map_assoc($rows),
+  );
+
   $form['submit'][] = array(
     '#type' => 'submit',
     '#value' => 'Preview',
@@ -93,7 +103,7 @@ function arc2_store_export_form_preview($form, $form_state) {
 }
 
 function arc2_store_export_form_download($form, $form_state) {
-  $store = arc2_store_get_store('triplestore');
+  $store = arc2_store_get_store($form_state['values']['rdf_database']);
   $q = 'CONSTRUCT {?s ?p ?o} {?s ?p ?o}';
   $rs = $store->query($q);
   $triples = ARC2::getTriplesFromIndex($rs['result']);
