@@ -53,7 +53,59 @@ function arc2_store_menu() {
     }
   }
 
+  $items['admin/config/services/arc2_store/export'] = array(
+    'title' => 'Export dump',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('arc2_store_export_form'),
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
   return $items;
+}
+
+function arc2_store_export_form() {
+
+  $form = array();
+
+  $form['submit'][] = array(
+    '#type' => 'submit',
+    '#value' => 'Preview',
+    '#submit' => array('arc2_store_export_form_preview'),
+  );
+
+  $form['submit'][] = array(
+    '#type' => 'submit',
+    '#value' => 'Download',
+    '#submit' => array('arc2_store_export_form_download'),
+  );
+
+  return $form;
+}
+
+function arc2_store_export_form_preview($form, $form_state) {
+  $store = arc2_store_get_store('triplestore');
+  $q = 'CONSTRUCT {?s ?p ?o} {?s ?p ?o}';
+  $rs = $store->query($q);
+  $triples = ARC2::getTriplesFromIndex($rs['result']);
+  $ser = ARC2::getNTriplesSerializer();
+  return dpm($ser->getSerializedTriples($triples));
+}
+
+function arc2_store_export_form_download($form, $form_state) {
+  $store = arc2_store_get_store('triplestore');
+  $q = 'CONSTRUCT {?s ?p ?o} {?s ?p ?o}';
+  $rs = $store->query($q);
+  $triples = ARC2::getTriplesFromIndex($rs['result']);
+  $ser = ARC2::getNTriplesSerializer();
+  header("Cache-Control: public");
+  header("Content-Type: application/octet-stream");
+  header("Cache-Control: no-store, no-cache, must-revalidate");
+  header("Cache-Control: post-check=0, pre-check=0");
+  header("Content-Disposition: attachment; filename=\"dump.nt\";" );
+  header("Content-Transfer-Encoding: binary");
+  print $ser->getSerializedTriples($triples);
+  drupal_exit();
 }
 
 
