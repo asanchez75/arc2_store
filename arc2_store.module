@@ -72,10 +72,18 @@ function arc2_store_export_form() {
   $query->fields('t', array('store_id'));
   $rows = $query->execute()->fetchCol(0);
 
+  $serializations = array('getNTriplesSerializer' => 'NTriples',  'getTurtleSerializer' => 'Turtle', 'getRDFXMLSerializer' => 'RDFXML', 'getRDFJSONSerializer' => 'RDFJSON');
+
   $form['rdf_database'] = array(
     '#title' => 'RDF databases',
-    '#type' => 'select',
     '#options' => drupal_map_assoc($rows),
+    '#type' => 'select',
+  );
+
+  $form['serialization'] = array(
+    '#title' => 'Serialization',
+    '#type' => 'select',
+    '#options' => $serializations,
   );
 
   $form['submit'][] = array(
@@ -98,7 +106,7 @@ function arc2_store_export_form_preview($form, $form_state) {
   $q = 'CONSTRUCT {?s ?p ?o} {?s ?p ?o}';
   $rs = $store->query($q);
   $triples = ARC2::getTriplesFromIndex($rs['result']);
-  $ser = ARC2::getNTriplesSerializer();
+  $ser = ARC2::{$form_state['values']['serialization']}();
   return dpm($ser->getSerializedTriples($triples));
 }
 
@@ -107,7 +115,7 @@ function arc2_store_export_form_download($form, $form_state) {
   $q = 'CONSTRUCT {?s ?p ?o} {?s ?p ?o}';
   $rs = $store->query($q);
   $triples = ARC2::getTriplesFromIndex($rs['result']);
-  $ser = ARC2::getNTriplesSerializer();
+  $ser = ARC2::{$form_state['values']['serialization']}();
   header("Cache-Control: public");
   header("Content-Type: application/octet-stream");
   header("Cache-Control: no-store, no-cache, must-revalidate");
